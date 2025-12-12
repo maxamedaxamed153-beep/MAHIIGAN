@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAHIGAN SHOPFY - Mobile App</title>
+    <style>
+        /* =======================================================
+           1. CSS-ta Guud iyo Qaabka Mobile-ka (BASE STYLES)
+           ======================================================= */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            background-color: #f0f0f0; 
+            color: #333;
+        }
+        .container {
+            max-width: 420px; /* Xajmiga Telefoonka */
+            margin: 0 auto;
+            background: white;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            min-height: 100vh; 
+        }
+        
+        /* Header & Logo */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 10px 0 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .app-logo {
+            width: 50px; 
+            height: 50px;
+            object-fit: contain; 
+            border-radius: 5px; 
+            margin-right: 10px;
+        }
+        .app-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #17a2b8; 
+        }
+        
+        h2 {
+            color: #28a745;
+            padding-bottom: 5px;
+            margin-top: 20px;
+        }
+        
+        /* Badhamada */
+        .checkout-btn {
+            width: 100%;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 15px 0;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .back-btn {
+            background-color: #6c757d;
+            margin-top: 15px;
+        }
+
+        /* Liiska Alaabta */
+        .product-img {
+            width: 80px; 
+            height: 80px; 
+            object-fit: cover; 
+            border-radius: 8px; 
+            margin-right: 15px;
+        }
+        .product-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .item-info-wrapper {
+             display: flex;
+             align-items: center;
+        }
+        .add-to-cart-btn {
+            color: white;
+            background-color: #28a745;
+            border: none;
+            padding: 8px 12px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            min-width: 40px; 
+            min-height: 40px;
+        }
+        
+        /* Cart Styles */
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px dotted #ccc;
+        }
+        
+        /* Checkout Bar */
+        .checkout-bar {
+            position: fixed; 
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 15px 15px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            max-width: 420px; 
+            margin: 0 auto;
+        }
+
+        /* =======================================================
+           2. LOGIN/LANDING PAGE STYLES (Centering)
+           ======================================================= */
+        #login-landing-section, #login-section {
+            display: flex; 
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center; 
+            min-height: 90vh; 
+            text-align: center;
+        }
+        
+        #login-section {
+            display: none; 
+            min-height: 90vh;
+        }
+
+        .landing-logo {
+            width: 150px; 
+            height: 150px; 
+            object-fit: contain;
+            border-radius: 15px; 
+            margin-bottom: 20px;
+        }
+
+        .landing-title {
+            color: #28a745; 
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        /* Foomamka */
+        .payment-method {
+            width: 100%;
+            max-width: 350px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            background-color: #fff;
+            box-sizing: border-box;
+        }
+        .input-group {
+            width: 100%; 
+            margin-bottom: 15px;
+        }
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* =======================================================
+           3. HAGAAGJINTA MODAL/ALERT BADHAMADA
+           ======================================================= */
+        .modal-overlay {
+            /* Waxaan hubinayaa in Alert-ku uu dhexda ku yaal */
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(0, 0, 0, 0.6); 
+            z-index: 10000; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+        }
+        .modal-content {
+            background-color: white; 
+            padding: 25px; 
+            border-radius: 10px; 
+            width: 80%; 
+            max-width: 350px; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); 
+            text-align: center;
+        }
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end; 
+            margin-top: 15px;
+        }
+        .modal-ok-btn {
+            background-color: #28a745; 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-weight: bold;
+            margin-left: 10px; 
+        }
+        .modal-main-btn {
+            width: 100%; 
+            padding: 10px 0; 
+            margin-top: 10px; 
+            border-radius: 5px; 
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+        }
+        
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <div class="header" id="app-header" style="display: none;">
+        <img src="https://i.ibb.co/DfkN8MZ9/file-00000000fbbc7243911c5a18cc52df9b.png" alt="MAHIGAN Logo" class="app-logo"> 
+        <span class="app-title">MAHIGAN SHOPFY</span> 
+    </div>
+
+    <div id="login-landing-section">
+        <img src="https://i.ibb.co/DfkN8MZ9/file-00000000fbbc7243911c5a18cc52df9b.png" alt="Welcome MAHIGAN SHOPFY Logo" class="landing-logo">
+
+        <h1 class="landing-title">Ku Soo Dhawoow MAHIGAN SHOPFY</h1>
+        <p>Dalbo Cuntadaada Caawo adigoo Hal Mar Gujinaya!</p>
+        
+        <div class="login-btn-group" style="width: 80%; max-width: 300px;">
+            <button id="login-button" class="checkout-btn" onclick="showLogin(true)">Geli (Login)</button>
+            <button id="signup-button" class="checkout-btn" style="background-color: #007bff; margin-top: 10px;" onclick="showLogin(false)">Diiwaangeli (Signup)</button>
+        </div>
+    </div>
+    
+    <div id="login-section">
+        <h2 id="login-title">Geli App-ka</h2>
+        
+        <div class="payment-method">
+            <form>
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Tusaale@gmail.com" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="ugu yaraan 6 xaraf" required>
+                </div>
+
+                <div class="input-group" id="confirm-password-group" style="display: none;">
+                    <label for="confirm-password">Xaqiiji Password-ka</label>
+                    <input type="password" id="confirm-password" placeholder="ugu yaraan 6 xaraf" required>
+                </div>
+                
+                <button type="button" class="checkout-btn" id="submit-login-btn" onclick="processAuth()">Geli App-ka</button>
+            </form>
+            
+            <p class="toggle-text" id="toggle-auth-text" style="margin-top: 15px;">
+                Ma haysaa Account? <span class="toggle-link" style="color: #28a745; cursor: pointer; font-weight: bold;" onclick="toggleAuth(false)">Diiwaangeli Hadda</span>
+            </p>
+        </div>
+        <button class="checkout-btn back-btn" style="width: 80%; max-width: 350px;" onclick="showLanding()">← Dib U Noqo</button>
+    </div>
+
+    <div id="menu-section" style="display: none; padding-bottom: 90px;">
+        
+        <h2>🍽️ Liiska Cuntada</h2>
+
+        <div class="product-item">
+            <div class="item-info-wrapper">
+                <img src="https://i.ibb.co/YBX11ywM/file-0000000041f0720cb4e87b565664aa64.png" alt="Salad" class="product-img"> 
+                <div class="item-info">
+                    <h3>Salad</h3>
+                    <span class="price">$3.50</span>
+                </div>
+            </div>
+            <button class="add-to-cart-btn" data-product-name="Salad" data-price="3.50">+</button>
+        </div>
+
+        <div class="product-item">
+            <div class="item-info-wrapper">
+                <img src="https://i.ibb.co/8nhQH3FD/file-0000000059cc71f5a777ee4398602247.png" alt="Burger" class="product-img"> 
+                <div class="item-info">
+                    <h3>Burger</h3>
+                    <span class="price">$10.50</span>
+                </div>
+            </div>
+            <button class="add-to-cart-btn" data-product-name="Burger" data-price="10.50">+</button>
+        </div>
+        
+        <div class="product-item">
+            <div class="item-info-wrapper">
+                <img src="https://i.ibb.co/Vcq79hnL/file-00000000a1e071f5b92d3778820e7024.png" alt="Pizza" class="product-img"> 
+                <div class="item-info">
+                    <h3>Pizza Slice</h3>
+                    <span class="price">$20.50</span>
+                </div>
+            </div>
+            <button class="add-to-cart-btn" data-product-name="Pizza Slice" data-price="20.50">+</button>
+        </div>
+
+        <div class="product-item">
+            <div class="item-info-wrapper">
+                <img src="https://i.ibb.co/rftsYWkX/file-00000000a808720abf28c6c2bda0951e.png" alt="Milkshake" class="product-img"> 
+                <div class="item-info">
+                    <h3>Milkshake</h3>
+                    <span class="price">$7.50</span>
+                </div>
+            </div>
+            <button class="add-to-cart-btn" data-product-name="Milkshake" data-price="7.50">+</button>
+        </div>
+
+        <div class="product-item">
+            <div class="item-info-wrapper">
+                <img src="https://i.ibb.co/bjtjjb3d/file-00000000f14c720a9525503de03f0617.png" alt="Coffee" class="product-img"> 
+                <div class="item-info">
+                    <h3>Coffee</h3>
+                    <span class="price">$4.00</span>
+                </div>
+            </div>
+            <button class="add-to-cart-btn" data-product-name="Coffee" data-price="4.00">+</button>
+        </div>
+
+        <hr>
+
+        <h2>🛒 Gacanta Alaabtaada</h2>
+        <div id="cart-items">
+            <p style="color: #777;">Wali maadan dooran wax alaab ah.</p>
+        </div>
+
+        <div class="cart-summary" style="font-size: 1.2em; font-weight: bold; margin-top: 15px; text-align: right;">
+            Wadarta Guud: <span id="total-price">$0.00</span>
+        </div>
+    </div>
+    
+    <div id="payment-section" style="display: none; padding-bottom: 90px;">
+        
+        <button class="checkout-btn back-btn" onclick="showMenu()">← Dib U Noqo Liiska Cuntada</button>
+        
+        <h2>💵 Bixinta Tooska ah</h2>
+        
+        <div class="total-display" style="text-align: right; font-size: 1.5em; font-weight: bold; margin-bottom: 20px; padding: 10px; border-bottom: 2px solid #28a745;">
+            Wadarta Guud: <span id="final-total">$0.00</span>
+        </div>
+        
+        <form action="https://formsubmit.co/maxamedaxamed153@gmail.com" method="POST" id="order-form">
+            
+            <input type="hidden" name="_next" value="https://mahiigan-dev.github.io/MAHIIGAN/"> 
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_subject" id="form-subject" value="DALAB CUSUB: MAHIGAN SHOPFY">
+            
+            <input type="hidden" name="Wadarta Guud" id="form-total-price" value="">
+            <input type="hidden" name="Liiska Dalabka" id="form-order-list" value="">
+            
+            <div class="payment-method">
+                <h3>👥 Xogta Macmiilka</h3>
+                
+                <div class="input-group">
+                    <label for="customer-name">Magaca Macmiilka</label>
+                    <input type="text" name="Magaca Macmiilka" id="customer-name" placeholder="Magacaaga Buuxa" required>
+                </div>
+                 <div class="input-group">
+                    <label for="customer-phone">Nambarka Telefoonka</label>
+                    <input type="tel" name="Nambarka Telefoonka" id="customer-phone" placeholder="6X XXXXXXX" required>
+                </div>
+                <div class="input-group">
+                    <label for="customer-location">Goobta/Guriga</label>
+                    <input type="text" name="Goobta/Guriga" id="customer-location" placeholder="Tusaale: Daarusalaam, Hargeysa" required>
+                </div>
+            </div>
+
+            
+            <div class="payment-method">
+                <h3>📱 Mobile Money/Number</h3>
+                
+                <div class="input-group">
+                    <label for="mobile-provider">Adeegga Mobile-ka</label>
+                    <select name="Adeegga Mobile-ka" id="mobile-provider" required>
+                        <option value="">Dooro Adeegga...</option>
+                        <option value="Zaad">Zaad Service</option>
+                        <option value="E-Dahab">E-Dahab</option>
+                        <option value="Adeeg Kale">Adeeg Kale</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="sender-mobile-number">Nambarka Lacagta Laga Soo Diray</label>
+                    <input type="tel" name="Nambarka Soo Diray" id="sender-mobile-number" placeholder="6X XXXXXXX" required>
+                </div>
+                
+            </div>
+            
+        </form>
+        
+    </div>
+
+</div> 
+<div id="custom-alert" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <h3 id="alert-title" style="color: #dc3545; margin-top: 0; font-size: 1.2em;">🚫 Digniin!</h3>
+        <div id="alert-message">Fadlan, ugu yaraan hal alaab ku dar gacanta alaabta ka hor inta aadan checkout samayn!</div>
+        
+        <div id="receipt-details-container" style="display: none; text-align: left; background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-top: 15px; border: 2px solid #28a745;">
+            <p style="text-align: center; font-weight: bold; color: #28a745;">RASIIDKA DALABKAAGA</p>
+            <hr style="border-top: 1px dotted #ccc;">
+            <div id="receipt-items-list" style="margin-bottom: 10px;"></div>
+            <div style="font-weight: bold; border-top: 1px solid #ccc; padding-top: 5px;">
+                Wadarta Guud: <span id="receipt-total-price" style="float: right;">$0.00</span>
+            </div>
+            <p style="text-align: center; font-size: 0.9em; margin-top: 15px;">Fadlan sug xaqiijinta dalabkaaga. Waad mahadsan tahay!</p>
+        </div>
+
+
+        <div class="modal-actions">
+            <button onclick="hideCustomAlert()" class="modal-ok-btn">OK</button>
+        </div>
+    </div>
+</div>
+
+
+<div class="checkout-bar" id="checkout-bar-menu" style="display: none;">
+    <button class="checkout-btn" onclick="showPayment()">Checkout Now</button>
+</div>
+
+<div class="checkout-bar" id="checkout-bar-payment" style="display: none;">
+    <button class="checkout-btn pay-btn" onclick="processOrderSubmit()">Dir Dalabka $0.00</button>
+</div>
+
+
+<script>
+    // =======================================================
+    // 0. AMMAANKA & DATABASE-KA TIJAABADA AH
+    // =======================================================
+    // User tusaale ah si aad u tijaabiso login-ka: email: user@test.com, password: password123
+    let users = [
+        { email: "user@test.com", password: "password123" } 
+    ];
+    let cart = {}; 
+    let currentCartTotal = '$0.00'; 
+    let currentCartTotalValue = 0;
+    
+    // =======================================================
+    // 1. HELPER FUNCTIONS (NAVIGATION & ALERTS)
+    // =======================================================
+    const loginLandingSection = document.getElementById('login-landing-section');
+    const loginSection = document.getElementById('login-section');
+    const appHeader = document.getElementById('app-header');
+    const menuSection = document.getElementById('menu-section');
+    const paymentSection = document.getElementById('payment-section');
+    const checkoutBarMenu = document.getElementById('checkout-bar-menu');
+    const checkoutBarPayment = document.getElementById('checkout-bar-payment');
+    const finalTotalSpan = document.getElementById('final-total');
+    const finalPayBtn = document.querySelector('#checkout-bar-payment .pay-btn');
+    const receiptDetailsContainer = document.getElementById('receipt-details-container');
+    const modalOkBtn = document.querySelector('.modal-ok-btn');
+    
+    // FormSubmit Elements
+    const orderForm = document.getElementById('order-form');
+    const formTotalPrice = document.getElementById('form-total-price');
+    const formOrderList = document.getElementById('form-order-list');
+
+
+    let isLoginMode = true; 
+
+    // Custom Alert Functions
+    function hideCustomAlert() {
+        document.getElementById('custom-alert').style.display = 'none';
+        receiptDetailsContainer.style.display = 'none';
+    }
+    
+    function showCustomAlert(title, message, isSuccess = false) {
+        const titleElement = document.getElementById('alert-title');
+
+        titleElement.textContent = title;
+        document.getElementById('alert-message').innerHTML = message; 
+        titleElement.style.color = isSuccess ? '#28a745' : '#dc3545';
+        
+        receiptDetailsContainer.style.display = 'none';
+        
+        document.getElementById('custom-alert').style.display = 'flex';
+    }
+
+    // Rasiidka Macmiilka (Customer Receipt)
+    function showReceiptAlert(orderTotal) {
+        const cartItemsDiv = document.getElementById('receipt-items-list');
+        let html = '';
+
+        for (const name in cart) {
+            const item = cart[name];
+            if (item.quantity > 0) {
+                 html += `
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9em; padding: 3px 0;">
+                        <span>${item.name || name} (${item.quantity}x)</span>
+                        <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                `;
+            }
+        }
+        
+        cartItemsDiv.innerHTML = html;
+        document.getElementById('receipt-total-price').textContent = orderTotal;
+        
+        showCustomAlert(
+            '✅ Dalabka Waa La Diray!', 
+            'Si guul ah ayaa dalabkaaga loogu diray maamulka. Waxaan si degdeg ah kuu soo xiriiri doonaa.', 
+            true 
+        );
+        
+        receiptDetailsContainer.style.display = 'block';
+    }
+
+    function hideAllSections(hideHeader = false) {
+        loginLandingSection.style.display = 'none';
+        loginSection.style.display = 'none';
+        menuSection.style.display = 'none';
+        paymentSection.style.display = 'none';
+        checkoutBarMenu.style.display = 'none';
+        checkoutBarPayment.style.display = 'none';
+        
+        if(hideHeader) {
+             appHeader.style.display = 'none';
+        } else {
+             appHeader.style.display = 'flex'; 
+        }
+    }
+
+    function showLanding() {
+        hideAllSections(true); 
+        loginLandingSection.style.display = 'flex'; 
+    }
+
+    function showLogin(isLogin) {
+        hideAllSections(true); 
+        loginSection.style.display = 'flex'; 
+        toggleAuth(isLogin); 
+        window.scrollTo(0, 0); 
+    }
+    
+    function showMenu() {
+        hideAllSections(false); 
+        menuSection.style.display = 'block';
+        checkoutBarMenu.style.display = 'block';
+        updateCartTotal(); // Hubi in total-ka la cusbooneysiiyay
+        window.scrollTo(0, 0); 
+    }
+    
+    function showPayment() {
+        
+        if (currentCartTotalValue === 0) {
+            showCustomAlert('🚫 Fadlan Dooro Alaab!', 'Ugu yaraan hal alaab ku dar gacanta alaabta ka hor inta aadan checkout samayn!');
+            return; 
+        }
+
+        hideAllSections(false); 
+        paymentSection.style.display = 'block';
+        checkoutBarPayment.style.display = 'block';
+
+        finalTotalSpan.textContent = currentCartTotal;
+        finalPayBtn.textContent = `Dir Dalabka ${currentCartTotal}`;
+        
+        window.scrollTo(0, 0); 
+    }
+    
+    // =======================================================
+    // 2. AMMAANKA: LOGIN/SIGNUP (Waa isku mid)
+    // =======================================================
+    
+    function isValidEmail(email) {
+        const regex = /\S+@\S+\.\S+/;
+        return regex.test(email);
+    }
+
+    function toggleAuth(isLogin) {
+        const loginTitle = document.getElementById('login-title');
+        const toggleAuthText = document.getElementById('toggle-auth-text');
+        const confirmPasswordGroup = document.getElementById('confirm-password-group');
+        const submitLoginBtn = document.getElementById('submit-login-btn');
+        
+        isLoginMode = isLogin;
+        if (isLogin) {
+            loginTitle.textContent = 'Geli App-ka';
+            submitLoginBtn.textContent = 'Geli App-ka';
+            toggleAuthText.innerHTML = 'Ma haysaa Account? <span class="toggle-link" style="color: #28a745; cursor: pointer; font-weight: bold;" onclick="toggleAuth(false)">Diiwaangeli Hadda</span>';
+            confirmPasswordGroup.style.display = 'none';
+        } else {
+            loginTitle.textContent = 'Diiwaangeli Account Cusub';
+            submitLoginBtn.textContent = 'Diiwaangeli Account';
+            toggleAuthText.innerHTML = 'Haddii aad Account leedahay? <span class="toggle-link" style="color: #28a745; cursor: pointer; font-weight: bold;" onclick="toggleAuth(true)">Geli Hadda</span>';
+            confirmPasswordGroup.style.display = 'block';
+        }
+    }
+    
+    function processAuth() {
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        
+        if (!isValidEmail(email)) {
+            showCustomAlert('🚫 Khalad Xogta Email-ka!', 'Fadlan hubi in Email-ku uu sax yahay (tusaale: magac@domain.com).');
+            return;
+        }
+
+        if (password.length < 6) {
+            showCustomAlert('🚫 Khalad Xogta Password-ka!', 'Password-ku waa inuu ka koobnaadaa ugu yaraan 6 xaraf/nambaro.');
+            return;
+        }
+
+        if (!isLoginMode) {
+            const confirmPassword = document.getElementById('confirm-password').value;
+            if (password !== confirmPassword) {
+                showCustomAlert('🚫 Khalad Password-ka!', 'Labada Password isku mid ma ahan!');
+                return;
+            }
+            
+            const existingUser = users.find(user => user.email === email);
+            if (existingUser) {
+                showCustomAlert('🚫 Diiwaangelin hore!', 'Email-kan hore ayaa loo isticmaalay. Fadlan Login samee ama isticmaal Email kale.');
+                return;
+            }
+            
+            users.push({ email: email, password: password });
+            showCustomAlert('✅ Guul!', 'Account-kaaga waa la diiwaangeliyay. Hadda waad gali kartaa.', true);
+            toggleAuth(true); 
+            
+        } else {
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                showCustomAlert('✅ Guul!', 'Si guul ah ayaad u gashay App-ka. Ku soo dhawoow!', true);
+                showMenu();
+            } else {
+                showCustomAlert('🚫 Khalad Gelitaan!', 'Email-ka ama Password-ku ma saxna. Fadlan isku day mar kale ama Diiwaangeli.');
+            }
+        }
+    }
+
+    // =======================================================
+    // 3. DALABKA TOOSKA AH (FORM SUBMIT LOGIC)
+    // =======================================================
+    
+    function prepareOrderData() {
+        let orderDetails = "";
+        let itemCounter = 1;
+        
+        // Dhis liiska alaabta
+        for (const name in cart) {
+            const item = cart[name];
+            if (item.quantity > 0) {
+                // Fariin ahaan loo dirayo FormSubmit
+                orderDetails += `${itemCounter}. ${name} - ${item.quantity}x @ $${item.price.toFixed(2)} | `; 
+                itemCounter++;
+            }
+        }
+        
+        // Buuxi Hidden Input-yada FormSubmit
+        formTotalPrice.value = currentCartTotal;
+        formOrderList.value = orderDetails.trim();
+        document.getElementById('form-subject').value = `DALAB CUSUB: ${currentCartTotal}`;
+
+        return true; 
+    }
+
+    function processOrderSubmit() {
+        
+        // Xaqiijinta Xogta Macmiilka
+        const customerName = document.getElementById('customer-name').value.trim();
+        const customerPhone = document.getElementById('customer-phone').value.trim();
+        const customerLocation = document.getElementById('customer-location').value.trim();
+        const mobileProvider = document.getElementById('mobile-provider').value;
+        const senderMobileNumber = document.getElementById('sender-mobile-number').value.trim();
+        
+        if (customerName === '' || customerPhone === '' || customerLocation === '') {
+            showCustomAlert('🚫 Xogta Macmiilka oo Maqan!', 'Fadlan buuxi Magaca, Nambarka iyo Goobta Macmiilka.');
+            return;
+        }
+        
+        // Xaqiijinta Xogta Bixinta (Waa in la doortaa labada meeloodba)
+        if (mobileProvider === '' || senderMobileNumber === '') {
+             showCustomAlert('🚫 Xogta Bixinta oo Maqan!', 'Fadlan dooro Adeegga Mobile-ka iyo Nambarka Lacagta laga soo diray.');
+            return;
+        }
+
+
+        if (prepareOrderData()) {
+            // Badbaadi total-ka rasiidka ka hor inta aan la tirtirin
+            const orderTotalForReceipt = currentCartTotal;
+            
+            // Xaqiijin ku muuji
+            showReceiptAlert(orderTotalForReceipt);
+            
+            // Dir Form-ka (Wuxuu u dirayaa FormSubmit)
+            orderForm.submit(); 
+            
+            // Tirtir cart-ka kadib dirista (Wuxuu u shaqeynayaa ka hor dib u celinta)
+            cart = {};
+            updateCartTotal(); 
+            // FormSubmit wuxuu si toos ah dib kuugu celinayaa bogga Menu-ga kadib guul
+        }
+    }
+    
+    // =======================================================
+    // 4. CART LOGIC 
+    // =======================================================
+    function displayCartItems() {
+        const cartItemsDiv = document.getElementById('cart-items');
+        let html = '';
+        let isEmpty = true;
+
+        for (const name in cart) {
+            const item = cart[name];
+            if (item.quantity > 0) {
+                isEmpty = false;
+                html += `
+                    <div class="product-item cart-item">
+                        <span style="font-weight: bold; color: #17a2b8; min-width: 20px;">${item.quantity}x</span> 
+                        <div class="item-info" style="flex-grow: 1;">
+                            <h3>${name}</h3>
+                            <span class="price">$${(item.price * item.quantity).toFixed(2)}</span>
+                        </div>
+                        <div class="cart-item-controls">
+                            <button class="add-to-cart-btn" style="background-color: #dc3545; margin-right: 5px;" onclick="decreaseQuantity('${name}')">-</button>
+                            <button class="add-to-cart-btn" onclick="increaseQuantity('${name}')">+</button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        if (isEmpty) {
+            cartItemsDiv.innerHTML = '<p style="color: #777;">Wali maadan dooran wax alaab ah.</p>';
+        } else {
+            cartItemsDiv.innerHTML = html;
+        }
+    }
+
+    function updateCartTotal() {
+        let total = 0;
+        for (const name in cart) {
+            const item = cart[name];
+            total += item.price * item.quantity;
+        }
+        const formattedTotal = total.toFixed(2);
+        currentCartTotalValue = total;
+        currentCartTotal = `$${formattedTotal}`;
+        document.getElementById('total-price').textContent = currentCartTotal;
+        
+        displayCartItems();
+    }
+    
+    function increaseQuantity(name) {
+        if (cart[name]) {
+            cart[name].quantity += 1;
+        } else {
+            const button = document.querySelector(`.add-to-cart-btn[data-product-name='${name}']`);
+            if (button) {
+                 const price = parseFloat(button.getAttribute('data-price'));
+                 cart[name] = { price: price, quantity: 1 };
+            }
+        }
+        updateCartTotal();
+    }
+    
+    function decreaseQuantity(name) {
+        if (cart[name] && cart[name].quantity > 0) {
+            cart[name].quantity -= 1;
+            if (cart[name].quantity === 0) {
+                delete cart[name];
+            }
+            updateCartTotal();
+        }
+    }
+
+    // Ku xir badhamada "Add to Cart" ee bogga Menu-ga
+    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const name = this.getAttribute('data-product-name');
+            const price = parseFloat(this.getAttribute('data-price'));
+
+            if (cart[name]) {
+                cart[name].quantity += 1;
+            } else {
+                cart[name] = { price: price, quantity: 1 };
+            }
+            updateCartTotal();
+        });
+    });
+
+
+    updateCartTotal(); 
+    showLanding(); 
+</script>
+
+</body>
+</html>
