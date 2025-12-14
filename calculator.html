@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator Casri ah (Backspace)</title>
+    <style>
+        /* CSS Variables for Easy Theming */
+        :root {
+            /* DARK MODE (Default - Sida Sawirkaaga) */
+            --bg-color: #2e2e2e;
+            --calc-bg: #1e1e1e;
+            --display-color: #ffffff;
+            --btn-num-bg: #444444; 
+            --btn-num-color: #ffffff;
+            --btn-op-bg: #3b82f6; /* Buluug */
+            --btn-op-color: #ffffff;
+            --btn-op-primary: #f97316; /* Orange for Toggle Button */
+            --btn-op-primary-color: #ffffff;
+            --text-footer: #aaaaaa;
+            --expression-size: 2.5em; 
+            --delete-color: #ff3b30; /* Midab cas ah oo la tirtiridda */
+        }
+
+        /* LIGHT MODE */
+        .light-mode {
+            --bg-color: #f0f0f0;
+            --calc-bg: #ffffff;
+            --display-color: #1a1a1a;
+            --btn-num-bg: #e0e0e0;
+            --btn-num-color: #1a1a1a;
+            --btn-op-bg: #93c5fd; 
+            --btn-op-color: #1a1a1a;
+            --btn-op-primary: #f97316;
+            --btn-op-primary-color: #ffffff;
+            --text-footer: #888888;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--bg-color);
+            margin: 0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            transition: background-color 0.3s;
+        }
+
+        .calculator {
+            background-color: var(--calc-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            width: 320px;
+            padding: 20px;
+        }
+
+        #display-expression {
+            text-align: right;
+            color: var(--display-color); 
+            height: 45px; 
+            font-size: var(--expression-size); 
+            padding: 0 15px;
+            overflow-x: auto;
+            white-space: nowrap;
+            margin-bottom: 5px; 
+        }
+
+        #display-result {
+            text-align: right;
+            color: var(--display-color);
+            height: 55px; 
+            font-size: 3.5em; 
+            padding: 0 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
+            overflow-x: auto;
+        }
+
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            border: none;
+            border-radius: 15px;
+            height: 65px;
+            font-size: 1.8em;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .btn-num {
+            background-color: var(--btn-num-bg);
+            color: var(--btn-num-color);
+        }
+
+        .btn-utility {
+            background-color: var(--btn-op-bg); 
+            color: var(--btn-op-color);
+        }
+        
+        /* Badhanka Backspace/Delete */
+        .btn-delete {
+            background-color: var(--delete-color); 
+            color: var(--btn-op-primary-color);
+            font-size: 1.5em;
+        }
+
+        .btn-primary {
+            background-color: var(--btn-op-bg); 
+            color: var(--btn-op-color);
+        }
+
+        .btn-zero {
+            grid-column: span 2;
+            text-align: left;
+            padding-left: 25px;
+        }
+        
+        #btn-equals {
+            background-color: var(--btn-op-bg);
+            color: var(--btn-op-color);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        #toggle-theme {
+            width: 100%;
+            height: 50px;
+            margin-top: 20px;
+            border-radius: 15px;
+            font-size: 1.1em;
+            background-color: var(--btn-op-primary);
+            color: var(--btn-op-primary-color);
+            box-shadow: none;
+        }
+
+        .footer {
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: var(--text-footer);
+        }
+    </style>
+</head>
+<body class="dark-mode"> 
+
+    <div class="calculator">
+        <div id="display-expression"></div>
+        <div id="display-result">0</div>
+
+        <div class="buttons-grid">
+            <button class="btn-utility" onclick="clearDisplay()">C</button>
+            <button class="btn-utility" onclick="changeSign()">±</button>
+            <button class="btn-delete" onclick="deleteLast()">⌫</button> <button class="btn-primary" onclick="appendOperator('/')">÷</button>
+            
+            <button class="btn-num" onclick="appendNumber('7')">7</button>
+            <button class="btn-num" onclick="appendNumber('8')">8</button>
+            <button class="btn-num" onclick="appendNumber('9')">9</button>
+            <button class="btn-primary" onclick="appendOperator('*')">×</button>
+
+            <button class="btn-num" onclick="appendNumber('4')">4</button>
+            <button class="btn-num" onclick="appendNumber('5')">5</button>
+            <button class="btn-num" onclick="appendNumber('6')">6</button>
+            <button class="btn-primary" onclick="appendOperator('-')">-</button>
+
+            <button class="btn-num" onclick="appendNumber('1')">1</button>
+            <button class="btn-num" onclick="appendNumber('2')">2</button>
+            <button class="btn-num" onclick="appendNumber('3')">3</button>
+            <button class="btn-primary" onclick="appendOperator('+')">+</button>
+
+            <button class="btn-utility" onclick="appendOperator('%')">%</button>
+            <button class="btn-num" onclick="appendNumber('0')">0</button>
+            <button class="btn-num" onclick="appendDecimal()">.</button>
+            <button class="btn-primary" id="btn-equals" onclick="calculateResult()">=</button>
+        </div>
+
+        <button id="toggle-theme" onclick="toggleTheme()">Toggle Dark/Light</button>
+    </div>
+
+    <div class="footer">
+        Created by Maxamed
+    </div>
+
+    <script>
+        let currentInput = '0';
+        let previousInput = null;
+        let operation = null;
+        let waitingForSecondOperand = false;
+
+        const resultDisplay = document.getElementById('display-result');
+        const expressionDisplay = document.getElementById('display-expression');
+        const body = document.body;
+
+        function updateDisplays() {
+            resultDisplay.textContent = currentInput;
+            
+            // Muuji xisaabinta socota 
+            if (previousInput !== null && operation !== null && !waitingForSecondOperand) {
+                 expressionDisplay.textContent = `${previousInput} ${operation.replace('*', '×').replace('/', '÷')} ${currentInput}`;
+            } else if (previousInput !== null && operation !== null) {
+                 expressionDisplay.textContent = `${previousInput} ${operation.replace('*', '×').replace('/', '÷')}`;
+            } else {
+                 expressionDisplay.textContent = '';
+            }
+        }
+
+        function clearDisplay() {
+            currentInput = '0';
+            previousInput = null;
+            operation = null;
+            waitingForSecondOperand = false;
+            updateDisplays();
+        }
+
+        // --- Shaqada Cusub ee Tirtiridda Hal Xaraf ---
+        function deleteLast() {
+            if (currentInput === '0' || currentInput === 'Error: Division by Zero') {
+                return; // Ma tirtiri karo haddii ay tahay '0' ama 'Error'
+            }
+            
+            // Tirtir xarafka ugu dambeeya
+            currentInput = currentInput.slice(0, -1); 
+            
+            // Haddii nambarku meesha ka baxo, dib ugu celi '0'
+            if (currentInput === '' || currentInput === '-') {
+                currentInput = '0';
+            }
+            
+            // Haddii aan lagu jirin xaalad xisaabeed (i.e., natiijadii kama dambaysta ahayd)
+            if (waitingForSecondOperand) {
+                waitingForSecondOperand = false;
+            }
+
+            updateDisplays();
+        }
+
+        function appendNumber(number) {
+            if (currentInput.length >= 10 && !waitingForSecondOperand) return; 
+
+            if (waitingForSecondOperand) {
+                currentInput = number;
+                waitingForSecondOperand = false;
+            } else {
+                currentInput = currentInput === '0' ? number : currentInput + number;
+            }
+            updateDisplays();
+        }
+
+        function appendDecimal() {
+            if (waitingForSecondOperand) {
+                currentInput = '0.';
+                waitingForSecondOperand = false;
+                updateDisplays();
+                return;
+            }
+            if (!currentInput.includes('.')) {
+                currentInput += '.';
+            }
+            updateDisplays();
+        }
+
+        function performCalculation(first, second, op) {
+            first = parseFloat(first);
+            second = parseFloat(second);
+
+            if (op === '+') return first + second;
+            if (op === '-') return first - second;
+            if (op === '*') return first * second;
+            if (op === '/') {
+                if (second === 0) return 'Error: Division by Zero'; 
+                return first / second;
+            }
+            if (op === '%') return first * (second / 100);
+            return second; 
+        }
+
+        function appendOperator(nextOperation) {
+            const inputValue = parseFloat(currentInput);
+
+            if (operation && waitingForSecondOperand) {
+                operation = nextOperation;
+                updateDisplays();
+                return; 
+            }
+
+            if (previousInput === null) {
+                previousInput = inputValue;
+            } else if (operation) {
+                const result = performCalculation(previousInput, inputValue, operation);
+                
+                if (typeof result === 'string' && result.includes('Error')) {
+                    currentInput = result;
+                    previousInput = null;
+                    operation = null;
+                    waitingForSecondOperand = false;
+                    updateDisplays();
+                    return;
+                }
+                
+                currentInput = String(parseFloat(result.toFixed(8))); 
+                previousInput = result;
+            }
+
+            waitingForSecondOperand = true;
+            operation = nextOperation;
+            updateDisplays();
+        }
+
+        function calculateResult() {
+            if (previousInput === null || operation === null) return;
+
+            const secondOperand = parseFloat(currentInput);
+            
+            const result = performCalculation(previousInput, secondOperand, operation);
+
+            if (typeof result === 'string' && result.includes('Error')) {
+                 currentInput = result;
+            } else {
+                 currentInput = String(parseFloat(result.toFixed(8))); 
+            }
+            
+            operation = null;
+            previousInput = null;
+            waitingForSecondOperand = true;
+            expressionDisplay.textContent = ''; 
+            updateDisplays();
+        }
+
+        function changeSign() {
+            currentInput = (parseFloat(currentInput) * -1).toString();
+            updateDisplays();
+        }
+        
+        function toggleTheme() {
+            if (body.classList.contains('dark-mode')) {
+                body.classList.remove('dark-mode');
+                body.classList.add('light-mode');
+            } else {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
+            }
+        }
+        
+        updateDisplays();
+
+    </script>
+</body>
+</html>
