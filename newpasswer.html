@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deji Fure Cusub</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="card">
+    <div style="width:52px;height:52px;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;background:#0b2a2a;border:1px solid #11514a;border-radius:16px;color:#1fd6a0;">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 4.5 3.4 8 8 9 4.6-1 8-4.5 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>
+    </div>
+
+    <h1>Deji Fure Cusub</h1>
+    <p class="subtitle" style="margin-bottom:30px;">Fadlan dooro fure cusub oo adag oo aadan hore u isticmaalin.</p>
+
+    <form id="resetForm" novalidate>
+      <div class="field">
+        <label for="password">Furaha Cusub</label>
+        <div class="input-wrap">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          <input type="password" id="password" name="password" placeholder="Geli furaha cusub" autocomplete="new-password" required>
+          <button type="button" class="toggle" data-target="password" aria-label="Muuji furaha">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="confirm">Ku celi Furaha Cusub</label>
+        <div class="input-wrap">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          <input type="password" id="confirm" name="confirm" placeholder="Dib u geli furaha cusub" autocomplete="new-password" required>
+          <button type="button" class="toggle" data-target="confirm" aria-label="Muuji furaha">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary" style="margin-top:8px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>
+        Keydi Furaha Cusub
+      </button>
+    </form>
+
+    <p class="login-link" style="margin-top:36px;">
+      <a href="login.html" style="color:var(--text);font-weight:500;margin-left:0;">Ka noqo oo gal</a>
+    </p>
+  </main>
+
+  <script>
+    document.querySelectorAll('.toggle').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var input = document.getElementById(btn.dataset.target);
+        input.type = input.type === 'password' ? 'text' : 'password';
+      });
+    });
+  </script>
+</body>
+</html>
