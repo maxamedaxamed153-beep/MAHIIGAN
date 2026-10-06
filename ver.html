@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xaqiijinta Koodhka 6-da Lambar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="card">
+    <div style="width:52px;height:52px;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;background:#0c2433;border:1px solid #14506b;border-radius:16px;color:var(--accent-soft);">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 4.5 3.4 8 8 9 4.6-1 8-4.5 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>
+    </div>
+
+    <h1>Xaqiijinta Koodhka 6-da Lambar</h1>
+    <p class="subtitle" style="margin-bottom:30px;">
+      Waxaan koodh xaqiijin ah u dirnay cinwaanka:<br>
+      <strong style="color:var(--accent-soft);font-weight:600;">axmed_dev@amanauth.so</strong>
+      <a href="forgot-password.html" style="margin-left:8px;font-size:0.9rem;color:var(--muted);text-decoration:underline;">Beddel Email-ka</a>
+    </p>
+
+    <form id="otpForm" novalidate>
+      <label style="text-align:center;margin-bottom:16px;">Geli koodhka lambarka ah</label>
+
+      <div id="otpBoxes" style="display:flex;justify-content:center;gap:10px;margin-bottom:28px;">
+        <input class="otp" type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="Lambarka 1">
+        <input class="otp" type="text" inputmode="numeric" maxlength="1" aria-label="Lambarka 2">
+        <input class="otp" type="text" inputmode="numeric" maxlength="1" aria-label="Lambarka 3">
+        <input class="otp" type="text" inputmode="numeric" maxlength="1" aria-label="Lambarka 4">
+        <input class="otp" type="text" inputmode="numeric" maxlength="1" aria-label="Lambarka 5">
+        <input class="otp" type="text" inputmode="numeric" maxlength="1" aria-label="Lambarka 6">
+      </div>
+
+      <button type="submit" class="btn-primary">
+        Xaqiiji Koodhka
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </form>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:28px;font-size:0.95rem;color:var(--muted);">
+      <a href="forgot-password.html" style="display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-weight:500;">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+        Ka noqo
+      </a>
+      <span>Dib u dir ka dib <strong id="timer" style="color:var(--accent-soft);font-weight:600;">26s</strong></span>
+    </div>
+  </main>
+
+  <style>
+    .otp {
+      width: 100%;
+      max-width: 52px;
+      height: 62px;
+      text-align: center;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      color: var(--text);
+      font-size: 1.4rem;
+      font-weight: 600;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .otp:focus {
+      border-color: var(--accent-soft);
+      box-shadow: 0 0 0 3px rgba(34, 196, 240, 0.2);
+    }
+  </style>
+
+  <script>
+    var boxes = document.querySelectorAll('.otp');
+
+    boxes.forEach(function (box, i) {
+      box.addEventListener('input', function () {
+        box.value = box.value.replace(/\D/g, '');
+        if (box.value && i < boxes.length - 1) boxes[i + 1].focus();
+      });
+      box.addEventListener('keydown', function (e) {
+        if (e.key === 'Backspace' && !box.value && i > 0) boxes[i - 1].focus();
+      });
+      box.addEventListener('paste', function (e) {
+        var digits = (e.clipboardData.getData('text') || '').replace(/\D/g, '').slice(0, boxes.length);
+        if (!digits) return;
+        e.preventDefault();
+        digits.split('').forEach(function (d, k) { boxes[k].value = d; });
+        boxes[Math.min(digits.length, boxes.length - 1)].focus();
+      });
+    });
+    boxes[0].focus();
+
+    var seconds = 26;
+    var timerEl = document.getElementById('timer');
+    var countdown = setInterval(function () {
+      seconds--;
+      if (seconds <= 0) {
+        clearInterval(countdown);
+        timerEl.innerHTML = '<a href="#">Dib u dir</a>';
+        timerEl.previousSibling.textContent = '';
+      } else {
+        timerEl.textContent = seconds + 's';
+      }
+    }, 1000);
+  </script>
+</body>
+</html>
