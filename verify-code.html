@@ -66,42 +66,7 @@
       border-color: var(--accent-soft);
       box-shadow: 0 0 0 3px rgba(34, 196, 240, 0.2);
     }
-  </style>
-
-  <script>
-    var boxes = document.querySelectorAll('.otp');
-
-    boxes.forEach(function (box, i) {
-      box.addEventListener('input', function () {
-        box.value = box.value.replace(/\D/g, '');
-        if (box.value && i < boxes.length - 1) boxes[i + 1].focus();
-      });
-      box.addEventListener('keydown', function (e) {
-        if (e.key === 'Backspace' && !box.value && i > 0) boxes[i - 1].focus();
-      });
-      box.addEventListener('paste', function (e) {
-        var digits = (e.clipboardData.getData('text') || '').replace(/\D/g, '').slice(0, boxes.length);
-        if (!digits) return;
-        e.preventDefault();
-        digits.split('').forEach(function (d, k) { boxes[k].value = d; });
-        boxes[Math.min(digits.length, boxes.length - 1)].focus();
-      });
-    });
-    boxes[0].focus();
-
-    var seconds = 26;
-    var timerEl = document.getElementById('timer');
-    var countdown = setInterval(function () {
-      seconds--;
-      if (seconds <= 0) {
-        clearInterval(countdown);
-        timerEl.innerHTML = '<a href="#">Dib u dir</a>';
-        timerEl.previousSibling.textContent = '';
-      } else {
-        timerEl.textContent = seconds + 's';
-      }
-    }, 1000);
-  </script>
+    </style>
     <script type="module" src="verify.js"></script>
 </body>
 </html>
