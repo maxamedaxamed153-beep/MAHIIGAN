@@ -5,7 +5,6 @@ export const CONFIG = {
     EMAILJS_TEMPLATE_ID: "template_i2xigbc",
     
     // Firebase Keys
-    export const firebaseConfig = CONFIG.FIREBASE; // ✅ Ku dar safkan config.js hoosteeda
     FIREBASE: {
         apiKey: "AIzaSyABwzxaSftH4-Lrga8vxZSo0y8AD4uHHfQ",
         authDomain: "mahiigan-6763a.firebaseapp.com",
@@ -16,3 +15,4 @@ export const CONFIG = {
         measurementId: "G-7W5L7FSW9F"
     }
 };
+export const firebaseConfig = CONFIG.FIREBASE; // ✅ Ku dar safkan config.js hoosteeda
