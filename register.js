@@ -10,9 +10,9 @@ form.addEventListener('submit', function (e) {
     e.preventDefault();
 
     // 1. Soo qabo xogta
-    const name = document.getElementById('userName').value;
-    const email = document.getElementById('userEmail').value;
-    const password = document.getElementById('userPassword').value;
+    const name = document.getElementById('fullname').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
 
     // 2. Ku kaydi sessionStorage (Muhiim u ah Firebase)
     sessionStorage.setItem('userName', name);
