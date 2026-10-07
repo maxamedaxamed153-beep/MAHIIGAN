@@ -2,9 +2,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebas
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
 // Xogta Firebase config ka soo import gareey config.js
-import { firebaseConfig } from './config.js';
+import { CONFIG } from './config.js'; // ✅ Soo import garee CONFIG
 
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(CONFIG.FIREBASE); // ✅ Isticmaal CONFIG.FIREBASE
 const db = getFirestore(app);
 
 document.addEventListener('DOMContentLoaded', () => {
