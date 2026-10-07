@@ -36,7 +36,7 @@ form.addEventListener('submit', function (e) {
     // 5. Dir Email-ka
     emailjs.send(CONFIG.EMAILJS_SERVICE_ID, CONFIG.EMAILJS_TEMPLATE_ID, templateParams)
         .then(function (response) {
-            window.location.href = 'reviewcode.html';
+            window.location.href = 'verify-code.html';
         }, function (error) {
             alert('Cilad ayaa dhacday, fadlan dib u isku day.');
             btn.innerHTML = 'Send Code Email <i class="fa-solid fa-paper-plane"></i>';
