@@ -16,8 +16,8 @@ const db = getFirestore(app);
 document.getElementById('loginForm').addEventListener('submit', async function (e) {
   e.preventDefault();
 
-  const email = document.getElementById('loginEmail').value.trim();
-  const pass = document.getElementById('loginPassword').value;
+  const email = document.getElementById('identity').value.trim();
+  const pass = document.getElementById('password').value;
 
   try {
     const docRef = doc(db, "users", email);
