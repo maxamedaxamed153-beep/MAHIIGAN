@@ -4,7 +4,7 @@
 emailjs.init(CONFIG.EMAILJS_PUBLIC_KEY);
 
 const form = document.getElementById('registerForm');
-const btn = document.querySelector('.btn');
+const btn = document.querySelector('.btn-primary');
 
 form.addEventListener('submit', function (e) {
     e.preventDefault();
