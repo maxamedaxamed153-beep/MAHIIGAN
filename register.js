@@ -30,7 +30,7 @@ form.addEventListener('submit', function (e) {
     const templateParams = {
         to_name: name,
         to_email: email,
-        message: verificationCode
+        passcode: verificationCode
     };
 
     // 5. Dir Email-ka
