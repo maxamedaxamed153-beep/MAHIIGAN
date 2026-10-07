@@ -1,4 +1,5 @@
 // register.js
+import { CONFIG } from './config.js'; // ✅ Ku dar safkan ugu sareysa
 
 // Bilow EmailJS (key-ga wuxuu ka imaanayaa config.js)
 emailjs.init(CONFIG.EMAILJS_PUBLIC_KEY);
