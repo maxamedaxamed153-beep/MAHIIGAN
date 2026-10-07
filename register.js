@@ -1,5 +1,5 @@
 // register.js
-import { CONFIG } from './config.js'; // ✅ Ku dar safkan ugu sareysa
+import { CONFIG } from './config.js';
 import { checkAccountExists } from './register2.js';
 import { redirectIfLoggedIn } from './session.js';
 
@@ -55,7 +55,6 @@ form.addEventListener('submit', async function (e) {
 
     // 5. Badhanka bedel
     btn.innerHTML = 'Waa la dirayaa... <i class="fa-solid fa-spinner fa-spin"></i>';
-    btn.style.backgroundColor = '#f59e0b';
 
     const templateParams = {
         to_name: name,
@@ -65,9 +64,9 @@ form.addEventListener('submit', async function (e) {
 
     // 6. Dir Email-ka
     emailjs.send(CONFIG.EMAILJS_SERVICE_ID, CONFIG.EMAILJS_TEMPLATE_ID, templateParams)
-        .then(function (response) {
+        .then(function () {
             window.location.href = 'verify-code.html';
-        }, function (error) {
+        }, function () {
             alert('Cilad ayaa dhacday, fadlan dib u isku day.');
             resetBtn();
         });
