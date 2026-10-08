@@ -48,7 +48,7 @@ form.addEventListener('submit', async function (e) {
         const templateParams = {
             to_email: email,
             to_name: userData.name,
-            message: verificationCode
+            otp_code: verificationCode
         };
 
         // 5. Dir email-ka
