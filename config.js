@@ -2,7 +2,11 @@
 export const CONFIG = {
     EMAILJS_PUBLIC_KEY: "9TO7hHMapqy4U9kNz",
     EMAILJS_SERVICE_ID: "service_j2uu8yq",
+    //1.kan shaqadiisa waa in uu code ka passwer badalida  diro sida uu js ku fahmi karana waa ama xiriiriyaha waa
+    //{{message}}
     EMAILJS_TEMPLATE_ID: "template_hd1r8rd",
+    //2.kan waxa loo isticmaala in uu  diro xaqiijinta code ka in user ku lee yahay emailka
+    //{{passcode}}
     EMAILJS_RESET_TEMPLATE_ID: "template_t13sh6n",
     // Firebase Keys
     FIREBASE: {
