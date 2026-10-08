@@ -54,7 +54,7 @@ form.addEventListener('submit', async function (e) {
         // 5. Dir email-ka
         await emailjs.send(
             CONFIG.EMAILJS_SERVICE_ID,
-            CONFIG.EMAILJS_RESET_TEMPLATE_ID,
+            CONFIG.EMAILJS_TEMPLATE_ID,
             templateParams
         );
 
