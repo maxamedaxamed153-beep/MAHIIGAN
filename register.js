@@ -35,7 +35,7 @@ form.addEventListener('submit', async function (e) {
         const { exists } = await checkAccountExists(email);
         if (exists) {
             alert('Email-kan horay account ayuu u lahaa! Fadlan Login samee. ⚠️');
-            window.location.href = 'Login.html';
+            window.location.href = 'login.html';
             return;
         }
     } catch (error) {
