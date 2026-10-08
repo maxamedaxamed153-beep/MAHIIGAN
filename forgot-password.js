@@ -19,7 +19,7 @@ function resetBtn() {
 form.addEventListener('submit', async function (e) {
     e.preventDefault();
 
-    const email = document.getElementById('resetEmail').value.trim();
+    const email = document.getElementById('email').value.trim();
 
     // Bedel badhanka si qofku u ogaado inuu sugayo
     sendBtn.innerHTML = 'Waa la dirayaa... <i class="fa-solid fa-spinner fa-spin"></i>';
