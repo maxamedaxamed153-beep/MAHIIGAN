@@ -3,7 +3,7 @@ export const CONFIG = {
     EMAILJS_PUBLIC_KEY: "wm5gF1fpGmTPyCjqP",
     EMAILJS_SERVICE_ID: "service_mzzoxxb",
     EMAILJS_TEMPLATE_ID: "template_i2xigbc",
-    
+    EMAILJS_RESET_TEMPLATE_ID: "template_k3jmvob
     // Firebase Keys
     FIREBASE: {
         apiKey: "AIzaSyABwzxaSftH4-Lrga8vxZSo0y8AD4uHHfQ",
