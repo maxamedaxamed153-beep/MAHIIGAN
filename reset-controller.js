@@ -1,14 +1,12 @@
 // reset-controller.js
-import { checkResetCode, setNewPassword, sendResetNotification } from "./reset-service.js";
+import { updateFirestorePassword } from "./reset-service.js";
 
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("resetForm");
     const passwordInput = document.getElementById("password");
     const confirmInput = document.getElementById("confirm");
     const alertMessage = document.getElementById("alertMessage");
     const submitBtn = form?.querySelector("button[type='submit']");
-    
-    let userEmail = "";
 
     // A. Password Toggle (Show/Hide)
     document.querySelectorAll(".toggle").forEach((btn) => {
@@ -20,27 +18,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     });
 
-    // B. Akhri URL oobCode
+    // B. Ka soo saar URL-ka ID-ga ama Email-ka document-ka Firestore
+    // Tusaale URL: reset-password.html?id=maxamedaxamed153@gmail.com
     const urlParams = new URLSearchParams(window.location.search);
-    const oobCode = urlParams.get("oobCode");
+    const docId = urlParams.get("id") || urlParams.get("email");
 
-    if (!oobCode) {
-        showAlert("Link-ga aad isticmaashay ma saxna ama ma wato code-kii loo baahnaa.", "red");
+    if (!docId) {
+        showAlert("Document ID ama Email lagama helin URL-ka.", "red");
         if (form) form.style.display = "none";
         return;
     }
 
-    // C. Hubi in oobCode-ku shaqaynayo
-    const codeCheck = await checkResetCode(oobCode);
-    if (!codeCheck.success) {
-        showAlert("Link-ga waa uu dhacay ama hore ayaa loo isticmaalay. Dib u codso link cusub.", "red");
-        if (form) form.style.display = "none";
-        return;
-    }
-
-    userEmail = codeCheck.email; // Kaydi email-ka isticmaalaha
-
-    // D. Foomka Submit-kiisa
+    // C. Foomka Submit-kiisa
     if (form) {
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
@@ -63,30 +52,22 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return;
             }
 
-            // Disable button inta ay shaqadu socoto
             const originalBtnContent = submitBtn.innerHTML;
             submitBtn.disabled = true;
-            submitBtn.innerText = "Fadlan sug...";
+            submitBtn.innerText = "Keydinayaa...";
 
-            // Beddel password-ka
-            const res = await setNewPassword(oobCode, password);
+            // Cusboonaysii Firestore
+            const result = await updateFirestorePassword(docId, password);
 
-            if (res.success) {
-                showAlert("Furahaaga si guul leh ayaa loo beddelay! Waxaa loo leexinayaa bogga login-ka...", "green");
-
-                // Ikhtiyaari: Dir ogeysiis EmailJS ah
-                if (userEmail) {
-                    await sendResetNotification(userEmail);
-                }
-
+            if (result.success) {
+                showAlert("Furahaaga si guul leh ayaa loo beddelay! Waxaa loo leexinayaa login-ka...", "green");
                 setTimeout(() => {
                     window.location.href = "login.html";
-                }, 2500);
-
+                }, 2000);
             } else {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalBtnContent;
-                showAlert("Khalad ayaa dhacay: " + formatError(res.error), "red");
+                showAlert("Khalad ayaa dhacay: " + result.error, "red");
             }
         });
     }
@@ -96,19 +77,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             alertMessage.style.color = color === "green" ? "#1fd6a0" : "#ff6b6b";
             alertMessage.textContent = message;
             alertMessage.style.display = "block";
-        }
-    }
-
-    function formatError(errorCode) {
-        switch (errorCode) {
-            case "auth/expired-action-code":
-                return "Link-gii waa uu dhacay.";
-            case "auth/invalid-action-code":
-                return "Link-gu waa mid khaldan ama hore loo isticmaalay.";
-            case "auth/weak-password":
-                return "Furaha cusub waa inuu ka adag yahay 6 xaraf.";
-            default:
-                return errorCode;
         }
     }
 });
