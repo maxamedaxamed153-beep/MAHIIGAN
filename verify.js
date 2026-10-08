@@ -10,11 +10,12 @@ const db = getFirestore(app);
 document.addEventListener('DOMContentLoaded', () => {
   
   // 1. Soosaarida Email-ka ku kaydsan Session Storage
-  const savedEmail = sessionStorage.getItem('userEmail');
-  const emailDisplay = document.querySelector('.subtitle strong');
-  if (savedEmail && emailDisplay) {
-    emailDisplay.textContent = savedEmail;
-  }
+const savedEmail = sessionStorage.getItem('resetEmail') || sessionStorage.getItem('userEmail');
+const emailDisplay = document.querySelector('.subtitle strong');
+
+if (savedEmail && emailDisplay) {
+  emailDisplay.textContent = savedEmail;
+}
 
   // 2. Maareynta 6-da Sanduuq ee OTP (Auto-focus, Backspace, Paste)
   const boxes = document.querySelectorAll('.otp');
