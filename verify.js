@@ -76,7 +76,7 @@ if (savedEmail && emailDisplay) {
 
       // Isku xidh 6-da god ee koodhka lagu qoray
       const userCode = Array.from(boxes).map(box => box.value).join('');
-      const savedCode = sessionStorage.getItem('savedCode');
+      const savedCode = sessionStorage.getItem('resetCode') || sessionStorage.getItem('savedCode');
 
       if (userCode.length < 6) {
         alert('Fadlan dhameystir 6-da lambar ee koodhka.');
