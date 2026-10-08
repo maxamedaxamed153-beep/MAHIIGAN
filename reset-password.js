@@ -1,64 +1,66 @@
 // reset-password.js
-// Xogta oo dhan (Firebase + EmailJS) waxay ka imaanaysaa config.js
-import { CONFIG, firebaseConfig } from "./config.js";
-
+import { firebaseConfig } from "./config.js";
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {
-    getAuth,
-    sendPasswordResetEmail,
-    verifyPasswordResetCode,
-    confirmPasswordReset
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// Initialize Firebase (hal mar kaliya)
+// 1. Bilaaw Firebase iyo Firestore
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-const auth = getAuth(app);
+const db = getFirestore(app);
 
-// Initialize EmailJS (haddii library-gu page-ka ku jiro)
-if (typeof emailjs !== "undefined") {
-    emailjs.init(CONFIG.EMAILJS_PUBLIC_KEY);
-}
+document.addEventListener("DOMContentLoaded", () => {
+    const resetForm = document.getElementById("resetForm");
 
-// 1) Codso link reset ah (email loo diro)
-export async function requestPasswordReset(email) {
-    try {
-        await sendPasswordResetEmail(auth, email);
-        return { success: true };
-    } catch (error) {
-        return { success: false, error: error.code };
-    }
-}
+    if (resetForm) {
+        resetForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
 
-// 2) Hubi code-ka link-ga (oobCode) oo soo celi email-ka
-export async function checkResetCode(oobCode) {
-    try {
-        const email = await verifyPasswordResetCode(auth, oobCode);
-        return { success: true, email };
-    } catch (error) {
-        return { success: false, error: error.code };
-    }
-}
+            const passwordInput = document.getElementById("password");
+            const confirmInput = document.getElementById("confirm");
 
-// 3) Beddel password-ka cusub
-export async function setNewPassword(oobCode, newPassword) {
-    try {
-        await confirmPasswordReset(auth, oobCode, newPassword);
-        return { success: true };
-    } catch (error) {
-        return { success: false, error: error.code };
-    }
-}
+            const password = passwordInput.value.trim();
+            const confirm = confirmInput.value.trim();
 
-// 4) (Ikhtiyaari) EmailJS: ogeysiis ku dir email-ka kadib beddelka
-export async function sendResetNotification(email, name = "") {
-    if (typeof emailjs === "undefined") return { success: false, error: "emailjs-not-loaded" };
-    try {
-        await emailjs.send(CONFIG.EMAILJS_SERVICE_ID, CONFIG.EMAILJS_RESET_TEMPLATE_ID, {
-            to_email: email,
-            to_name: name
+            // Hubi in la geliyay furaha
+            if (!password || !confirm) {
+                alert("Fadlan buuxi labada meelood ee furaha!");
+                return;
+            }
+
+            // Hubi in labada fure is leeyihiin
+            if (password !== confirm) {
+                alert("Fadlan hubi, labada fure isku mid ma aha!");
+                return;
+            }
+
+            // Ogaaw email-ka user-ka (ha fariisto URL-ka ama localStorage)
+            const urlParams = new URLSearchParams(window.location.search);
+            const userEmail = urlParams.get("email") || localStorage.getItem("userEmail");
+
+            if (!userEmail) {
+                alert("Email-ka isticmaalaha la ma helin! Fadlan dib ka soo eeg ama maamuus link-ga.");
+                return;
+            }
+
+            try {
+                // Ku cusbooneysii furaha cusub document-ka user-ka ee Firestore
+                const userDocRef = doc(db, "users", userEmail);
+                
+                await updateDoc(userDocRef, {
+                    password: password
+                });
+
+                alert("Furahaaga si guul leh ayaa loo beddelay!");
+
+                // Nadiifi email-ka kaydsan haddii uu u baahnaa
+                localStorage.removeItem("userEmail");
+
+                // U wareeji bogga login-ka
+                window.location.href = "login.html";
+
+            } catch (error) {
+                console.error("Cillad Firestore:", error);
+                alert("Cillad ayaa dhacday marka furaha la beddelayay: " + error.message);
+            }
         });
-        return { success: true };
-    } catch (error) {
-        return { success: false, error: error.text || error.message };
     }
-}
+});
