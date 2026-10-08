@@ -59,7 +59,7 @@ form.addEventListener('submit', async function (e) {
         );
 
         alert('Code-ka xaqiijinta ayaa loo diray Email-kaaga! ✅');
-        window.location.href = 'verify-reset.html';
+        window.location.href = 'reset-password.html';
 
     } catch (error) {
         alert('Cilad ayaa dhacday: ' + (error.message || JSON.stringify(error)));
