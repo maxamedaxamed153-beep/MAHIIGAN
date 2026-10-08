@@ -1,21 +1,21 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
 // Xogta Firebase config ka soo import gareey config.js
-import { CONFIG } from './config.js'; // ✅ Soo import garee CONFIG
+import { CONFIG } from './config.js';
 
-const app = initializeApp(CONFIG.FIREBASE); // ✅ Isticmaal CONFIG.FIREBASE
+const app = initializeApp(CONFIG.FIREBASE);
 const db = getFirestore(app);
 
 document.addEventListener('DOMContentLoaded', () => {
   
   // 1. Soosaarida Email-ka ku kaydsan Session Storage
-const savedEmail = sessionStorage.getItem('resetEmail') || sessionStorage.getItem('userEmail');
-const emailDisplay = document.querySelector('.subtitle strong');
+  const savedEmail = sessionStorage.getItem('resetEmail') || sessionStorage.getItem('userEmail');
+  const emailDisplay = document.querySelector('.subtitle strong');
 
-if (savedEmail && emailDisplay) {
-  emailDisplay.textContent = savedEmail;
-}
+  if (savedEmail && emailDisplay) {
+    emailDisplay.textContent = savedEmail;
+  }
 
   // 2. Maareynta 6-da Sanduuq ee OTP (Auto-focus, Backspace, Paste)
   const boxes = document.querySelectorAll('.otp');
@@ -68,10 +68,10 @@ if (savedEmail && emailDisplay) {
     }, 1000);
   }
 
-  // 4. Xaqiijinta Koodhka & U dirida Firebase Firestore
+  // 4. Xaqiijinta Koodhka, Kaydinta Taariikhda & U gudbinta Bogga Furaha Cusub
   const otpForm = document.getElementById('otpForm');
   if (otpForm) {
-    otpForm.addEventListener('submit', async function(e) {
+    otpForm.addEventListener('submit', function(e) {
       e.preventDefault();
 
       // Isku xidh 6-da god ee koodhka lagu qoray
@@ -83,25 +83,17 @@ if (savedEmail && emailDisplay) {
         return;
       }
 
+      // Hubinta koodhka
       if (userCode === savedCode) {
-        const name = sessionStorage.getItem('userName');
-        const email = sessionStorage.getItem('userEmail');
-        const pass = sessionStorage.getItem('userPassword');
+        // Taariikhda furaha la beddelayo ku kaydi sessionStorage si bogga xiga loo isticmaalo
+        sessionStorage.setItem('passwordResetDate', new Date().toISOString());
 
-        try {
-          await setDoc(doc(db, "users", email), {
-            name: name,
-            email: email,
-            password: pass,
-            date: new Date().toISOString()
-          });
-          alert('Waa la diiwaangeliyay! ✅');
-          window.location.href = 'home.html';
-        } catch (error) {
-          alert('Cilad ayaa dhacday: ' + error.message);
-        }
+        alert('Koodhku waa sax! ✅');
+
+        // U gudbi bogga furaha cusub lagu qorayo
+        window.location.href = 'reset-password.html';
       } else {
-        alert('Koodhkaagu waa qaldan yahay.');
+        alert('Koodhkaagu waa qaldan yahay. ❌');
       }
     });
   }
