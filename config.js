@@ -6,7 +6,7 @@ export const CONFIG = {
     //{{message}}
     EMAILJS_TEMPLATE_ID: "template_hd1r8rd",
     //2.kan waxa loo isticmaala in uu  diro xaqiijinta code ka in user ku lee yahay emailka
-    //{{passcode}}
+    //{{otp_code}} waxa iska leh oo isticmaala forgot-password.js
     EMAILJS_RESET_TEMPLATE_ID: "template_t13sh6n",
     // Firebase Keys
     FIREBASE: {
